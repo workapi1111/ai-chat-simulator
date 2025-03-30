@@ -14,6 +14,9 @@ def get_ai_response(user_message, tone=None, emotion=None, bond=None):
         {"role": "user", "content": user_message}
     ]
 
+    print("📥 사용자 입력값 확인:", 성격, 감정, 친밀도)
+    print("📢 시스템 프롬프트:", system_prompt)
+
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4",
