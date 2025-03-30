@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>💘 AI 연애 시뮬레이터</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .chat-box {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .select-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    input[type="text"], select {
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    button {
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .personality-desc {
+      font-size: 14px;
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 6px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <h2>💘 AI 연애 시뮬레이터</h2>
+
+    <div class="select-wrapper">
+      <input type="text" id="messageInput" placeholder="메시지를 입력하세요..." required />
+
+      <select id="toneSelect" onchange="updateDescription()">
+        <option value="default">기본</option>
+        <option value="cynical">냉소적</option>
+        <option value="friendly">친근한</option>
+        <option value="professional">전문적인</option>
+      </select>
+
+      <div class="personality-desc" id="descBox">
+        중립적인 AI입니다. 무난한 톤으로 대화합니다.
+      </div>
+
+      <button onclick="sendMessage()">보내기</button>
+    </div>
+  </div>
+
+  <script>
+    function updateDescription() {
+      const desc = document.getElementById("descBox");
+      const val = document.getElementById("toneSelect").value;
+
+      const descriptions = {
+        "default": "중립적인 AI입니다. 무난한 톤으로 대화합니다.",
+        "cynical": "말투는 시크하고 가끔 비꼬기도 해요. 낯가림 심한 스타일입니다.",
+        "friendly": "다정하고 밝은 톤으로 말해요. 친화력 있고 공감 잘 해줍니다!",
+        "professional": "말투가 똑부러지고 정리돼 있어요. 전문가 느낌을 줍니다."
+      };
+
+      desc.textContent = descriptions[val] || "";
+    }
+
+    async function sendMessage() {
+      const message = document.getElementById("messageInput").value;
+      const tone = document.getElementById("toneSelect").value;
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: message,
+          성조: tone,
+          감정: "기본",       // 추후 감정 셀렉터 추가 가능
+          친밀도: "보통"     // 추후 친밀도 셀렉터 추가 가능
+        })
+      });
+
+      const data = await response.json();
+      alert("AI 응답: " + data.reply);
+    }
+
+    updateDescription();
+  </script>
+</body>
+</html>
