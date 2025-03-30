@@ -19,6 +19,8 @@ def chat():
     emotion = data.get("emotion", "중립")
     bond = data.get("bond", "start")  # start, middle, bonding
 
+    print("📦 사용자 입력값 확인:", 성격, 감정, 친밀도)
+
     bot_reply = get_ai_response(user_message, tone, emotion, bond)
     return jsonify({"reply": bot_reply})
 
