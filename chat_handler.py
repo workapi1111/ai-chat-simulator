@@ -6,6 +6,8 @@ from tone_logic import generate_system_prompt
 def get_ai_response(user_message, tone=None, emotion=None, bond=None):
     system_prompt, tone_info = generate_system_prompt(tone, emotion, bond)
 
+    print("📢 시스템 프롬프트:\n", system_prompt)
+
     # 메시지 구성
     messages = [
         {"role": "system", "content": system_prompt},
