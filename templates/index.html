@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>💗 AI 연애 시뮬레이터</title>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: #fdf6f8;
+      color: #333;
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background: #ff4d6d;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #e8415a;
+    }
+
+    #response {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff3f6;
+      border: 1px solid #ffccd5;
+      border-radius: 8px;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <h1>💗 AI 연애 시뮬레이터</h1>
+
+  <div class="input-group">
+    <label for="message">메시지를 입력하세요</label>
+    <input type="text" id="message" placeholder="예: 오늘 뭐했어?" />
+  </div>
+
+  <div class="input-group">
+    <label for="tone">톤 선택</label>
+    <select id="tone">
+      <option value="기본">기본</option>
+      <option value="유쾌한">유쾌한</option>
+      <option value="시니컬한">시니컬한</option>
+      <option value="다정한">다정한</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="emotion">감정 상태</label>
+    <select id="emotion">
+      <option value="중립">중립</option>
+      <option value="기쁨">기쁨</option>
+      <option value="슬픔">슬픔</option>
+      <option value="짜증">짜증</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="bonding">관계 단계</label>
+    <select id="bonding">
+      <option value="초기">초기</option>
+      <option value="중반">중반</option>
+      <option value="친밀">친밀</option>
+    </select>
+  </div>
+
+  <button onclick="sendMessage()">보내기</button>
+
+  <div id="response"></div>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById("message").value;
+      const tone = document.getElementById("tone").value;
+      const emotion = document.getElementById("emotion").value;
+      const bonding = document.getElementById("bonding").value;
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          tone,
+          emotion,
+          bonding
+        }),
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.reply;
+    }
+  </script>
+</body>
+</html>
