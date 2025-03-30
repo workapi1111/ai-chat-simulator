@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
-import openai
 import os
+from chat_handler import get_ai_response  # chat_handler 모듈에서 함수 불러오기
 
 app = Flask(__name__)
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai_api_key = os.environ.get("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
 @app.route("/")
 def index():
@@ -12,19 +13,13 @@ def index():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    user_message = request.json["message"]
+    data = request.json
+    user_message = data.get("message", "")
+    tone = data.get("tone", "기본")
+    emotion = data.get("emotion", "중립")
+    bond = data.get("bond", "start")  # start, middle, bonding
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "너는 감정적이고 장난기 있는 친구처럼 대화해. 질문에 정면으로만 답하지 말고, 너만의 감정과 생각을 섞어야 해."},
-            {"role": "user", "content": user_message}
-        ],
-        temperature=0.9,
-        max_tokens=400,
-    )
-
-    bot_reply = response.choices[0].message["content"]
+    bot_reply = get_ai_response(user_message, tone, emotion, bond)
     return jsonify({"reply": bot_reply})
 
 if __name__ == "__main__":
